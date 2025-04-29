@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Meta tag untuk responsif -->
+  <title>Messages</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+  <style>
+    /* Latar belakang dengan gradien */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6A7366, #B0C7A1);
+      color: #dad1d1;
+      text-align: center;
+      margin-top: 50px;
+      animation: fadeIn 2s ease-in;
+      padding: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    h1 {
+      font-weight: 600;
+      color: #fff;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      transition: all 0.5s ease;
+    }
+
+    input, button {
+      padding: 12px;
+      width: 250px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin: 10px;
+    }
+
+    button {
+      background-color: #6A7366;
+      color: rgb(211, 216, 198);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4E5C47;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    input:focus, button:focus {
+      outline: none;
+      border: 2px solid #4E5C47;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #03311c;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: none;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Tooltip text (disembunyikan secara default) */
+    .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #6A7366;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* Tooltip berada di atas input */
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    /* Menampilkan tooltip ketika hover pada .tooltip */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Footer dengan informasi */
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #595959;
+    }
+
+    footer a {
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Responsif untuk layar lebih kecil (misalnya, ponsel) */
+    @media screen and (max-width: 768px) {
+      input, button {
+        width: 90%; /* Lebar input dan tombol lebih kecil pada layar sempit */
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 2em; /* Mengurangi ukuran font judul */
+      }
+
+      #result {
+        width: 90%; /* Mengurangi lebar kontainer hasil */
+      }
+
+      .tooltiptext {
+        width: 150px; /* Menyesuaikan ukuran tooltip */
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 id="passwordPrompt">A Password Needed</h1>
+  <div class="tooltip">
+    <input type="password" id="passwordInput" placeholder="type it!">
+    <span class="tooltiptext">you know the pass rite?</span>
+  </div>
+  <button onclick="checkPassword()">Go!</button>
+
+  <script>
+    const correctPassword = "flutternutter"; 
+    const messages = {
+      "ai": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/4dquw6O.jpg"  
+      },
+      "yori": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/IWWGkMe.jpg"
+      },
+      "cinta": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/Nuw6a9B.jpg"
+      },
+      "rugun": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/KZyQzhS.jpg"
+      },
+      "irene": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/B2zbN3Y.jpg"  
+      },
+      "yessica": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/XF3ItQU.jpg"
+      },
+      "jebe": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/I6P9Onw.jpg"
+      },
+      "laras": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/BmGTmbl.jpg"
+      },
+      "meuthia": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/wlYYqwD.jpg"  
+      },
+      "leanna": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/duT6mFl.jpg"
+      },
+      "eunike": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/CEOLDXb.jpg"
+      },
+      "alfira": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/PhkKgBd.jpg"
+      },
+      "meta": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/YGeEHXr.jpg"  
+      },
+      "tiara": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/b1UcrLm.jpg"
+      },
+      "shafira": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/xaxV5bY.jpg"
+      },
+      "dania": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/Gx0xtyZ.jpg"
+      },
+      "dhea": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/vA0eFMh.jpg"  
+      },
+      "devira": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/RVM3n3B.jpg"
+      },
+      "nisa": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/QGTVg4A.jpg"
+      },
+      "meldyna": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "deul": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/nZhzGJh.jpg"  
+      },
+      "aisyah": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://via.placeholder.com/150.jpg?text=Budi"
+      },
+      "raneey": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "widya": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/DwwjThd.jpg"
+      },
+      "rafid": {
+        message: "blablabla",
+        image: "https://imgur.com/scvpTto.jpg"  
+      },
+      "wildan": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://via.placeholder.com/150.jpg?text=Budi"
+      },
+      "thio": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/NTPzJlI.jpg"
+      },
+      "rolland": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/83jmnRa.jpg"
+      },
+      "faiz": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/t2JzERC.jpg"  
+      },
+      "raka": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://via.placeholder.com/150.jpg?text=Budi"
+      },
+      "gosen": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "ferdinand": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "yoga": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/nZhzGJh.jpg"  
+      },
+      "katarina": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/PIQpArz.jpg"
+      },
+      "zahro": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "kadika": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/pE81fxZ.jpg"
+      },
+      "tey": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/nZhzGJh.jpg"  
+      },
+      "rani": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/Gw8nLbj.jpg"
+      },
+      "kiwa": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/2X85SpE.jpg"
+      },
+      "nazwa": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "nadroh": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/nZhzGJh.jpg"  
+      },
+      "maya": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/8xT71c1.jpg"
+      },
+      "fania": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "farrel": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      },
+      "rafi": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/nZhzGJh.jpg"  
+      },
+      "hazel": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://imgur.com/a4mXYsV.jpg"
+      },
+      "wira": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://imgur.com/04DiEjS.jpg"
+      },
+      "fansa": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      }
+    };
+
+    function checkPassword() {
+      const password = document.getElementById("passwordInput").value.trim();
+      if (password === correctPassword) {
+        // Sembunyikan input password dan tombol setelah berhasil login
+        document.getElementById("passwordInput").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("passwordPrompt").style.display = "none";
+
+        // Membuat elemen untuk input nama pencarian
+        const bodyContent = `
+          <h1>What's Your Name?</h1>
+          <input type="text" id="nameInput" placeholder="i know who you are">
+          <button onclick="findMessage()">Search</button>
+          <div id="result"></div>
+
+          <!-- Formulir untuk mengirim pesan balasan -->
+          <h2>Send a Reply</h2>
+          <form id="messageForm">
+            <input type="text" id="userName" placeholder="Your Name" required><br>
+            <textarea id="userMessage" placeholder="Your Message" rows="4" required></textarea><br>
+            <button type="submit">Send Message</button>
+          </form>
+        `;
+        
+        const bodyElement = document.createElement("div");
+        bodyElement.innerHTML = bodyContent;
+        document.body.appendChild(bodyElement);  // Menambahkan elemen pencarian nama ke body
+      } else {
+        alert("incorrect password, try again!");
+      }
+    }
+
+    function findMessage() {
+      const name = document.getElementById("nameInput").value.trim().toLowerCase();
+      const resultDiv = document.getElementById("result");
+
+      // Menampilkan hasil pencarian berdasarkan nama
+      if (messages[name]) {
+        resultDiv.innerHTML = `
+          <img src="${messages[name].image}" alt="${name} Image">
+          <p>${messages[name].message}</p>
+        `;
+      } else {
+        resultDiv.innerHTML = "<p>sorry, there's no message for you :(</p>";
+      }
+
+      // Menampilkan #result (kotak putih dengan pesan)
+      resultDiv.style.display = "block";
+      resultDiv.style.opacity = "1"; // Animasi muncul
+    }
+
+    // Handling form submission
+    document.getElementById('messageForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Mencegah form submit biasa
+      
+      const userName = document.getElementById('userName').value.trim();
+      const userMessage = document.getElementById('userMessage').value.trim();
+
+      // Log pesan di konsol (bisa diganti dengan pengolahan lebih lanjut)
+      console.log('User Message:', {
+        name: userName,
+        message: userMessage
+      });
+
+      alert('Your message has been sent! Thank you for your feedback.');
+
+      // Reset form setelah pengiriman
+      document.getElementById('messageForm').reset();
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <p><i class="fas fa-star"></i> cherry! <br> <a href="#">My thanks to you <3</a></p>
+  </footer>
+
+</body>
+</html>
