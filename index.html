@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
+  <style>
+    /* Latar belakang dengan gradien */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6A7366, #B0C7A1);
+      color: #dad1d1;
+      text-align: center;
+      margin-top: 50px;
+      animation: fadeIn 2s ease-in;
+      padding: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    h1 {
+      font-weight: 600;
+      color: #fff;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      transition: all 0.5s ease;
+    }
+
+    input, button {
+      padding: 12px;
+      width: 250px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      margin: 10px;
+    }
+
+    button {
+      background-color: #6A7366;
+      color: rgb(211, 216, 198);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #4E5C47;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    input:focus, button:focus {
+      outline: none;
+      border: 2px solid #4E5C47;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #03311c;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: none;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Animasi untuk munculnya elemen */
+    .fadeIn {
+      animation: fadeIn 2s ease-in;
+    }
+
+    /* Footer dengan informasi */
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #595959;
+    }
+
+    footer a {
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+  </style>
+</head>
+<body>
+  <h1 id="passwordPrompt">A Password Needed</h1>
+  <div class="tooltip">
+    <input type="password" id="passwordInput" placeholder="type it!">
+    <span class="tooltiptext">you know the pass rite?</span>
+  </div>
+  <button onclick="checkPassword()">Go!</button>
+
+  <script>
+    const correctPassword = "flutternutter"; 
+    const messages = {
+      "andi": {
+        message: "Selamat ulang tahun, Andi! Semoga sehat selalu!",
+        image: "https://imgur.com/nZhzGJh.jpg"  
+      },
+      "budi": {
+        message: "Hai Budi, semangat terus ya belajarnya!",
+        image: "https://via.placeholder.com/150.jpg?text=Budi"
+      },
+      "citra": {
+        message: "Citra, terima kasih sudah selalu membantu!",
+        image: "https://via.placeholder.com/150.jpg?text=Citra"
+      }
+    };
+
+    function checkPassword() {
+      const password = document.getElementById("passwordInput").value.trim();
+      if (password === correctPassword) {
+        // Sembunyikan input password dan tombol setelah berhasil login
+        document.getElementById("passwordInput").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("passwordPrompt").style.display = "none";
+
+        // Membuat elemen untuk input nama pencarian
+        const bodyContent = `
+          <h1>Search Your Name!</h1>
+          <input type="text" id="nameInput" placeholder="Input Your Name Here">
+          <button onclick="findMessage()">Search</button>
+          <div id="result"></div>
+        `;
+        
+        const bodyElement = document.createElement("div");
+        bodyElement.innerHTML = bodyContent;
+        document.body.appendChild(bodyElement);  // Menambahkan elemen pencarian nama ke body
+      } else {
+        alert("incorrect password, try again!");
+      }
+    }
+
+    function findMessage() {
+      const name = document.getElementById("nameInput").value.trim().toLowerCase();
+      const resultDiv = document.getElementById("result");
+
+      // Menampilkan hasil pencarian berdasarkan nama
+      if (messages[name]) {
+        resultDiv.innerHTML = `
+          <img src="${messages[name].image}" alt="${name} Image">
+          <p>${messages[name].message}</p>
+        `;
+      } else {
+        resultDiv.innerHTML = "<p>sorry, there's no message for you :(</p>";
+      }
+
+      // Menampilkan #result (kotak putih dengan pesan)
+      resultDiv.style.display = "block";
+      resultDiv.style.opacity = "1"; // Animasi muncul
+    }
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <p><i class="fas fa-star"></i> cherry! <br> <a href="#">My thanks to you <3</a></p>
+  </footer>
+
+</body>
+</html>
